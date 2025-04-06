@@ -3,7 +3,7 @@
 
 import React, { useRef, Suspense, useState, useEffect, useMemo } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame, useThree, GroupProps } from "@react-three/fiber";
 import {
   Environment,
   Preload,
@@ -20,7 +20,7 @@ import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 // --- 3D Scene Components ---
 
 // Low-Poly Retro Car Component (Now takes a ref)
-interface RetroCarProps extends THREE.GroupProps {
+interface RetroCarProps extends GroupProps {
   carRef: React.RefObject<THREE.Group>;
 }
 function RetroCar({ carRef, ...props }: RetroCarProps) {
