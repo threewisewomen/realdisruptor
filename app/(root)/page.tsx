@@ -1,9 +1,7 @@
-// app/page.tsx
 "use client";
-
-import React, { useRef, Suspense, useState, useEffect, useMemo } from "react";
+import React, { useRef, Suspense, useState, useMemo } from "react";
 import * as THREE from "three";
-import { Canvas, useFrame, useThree, GroupProps } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber"; // No GroupProps import needed here
 import {
   Environment,
   Preload,
@@ -14,38 +12,44 @@ import {
   GradientTexture,
   Text,
 } from "@react-three/drei";
-// Import scroll utilities from framer-motion
 import { motion, useScroll, useTransform, MotionValue } from "framer-motion";
 
 // --- 3D Scene Components ---
 
+// Define a type alias for the R3F group props
+type R3FGroupProps = JSX.IntrinsicElements["group"];
+
 // Low-Poly Retro Car Component (Now takes a ref)
-interface RetroCarProps extends GroupProps {
+// Extend the type alias instead of the complex type directly
+interface RetroCarProps extends R3FGroupProps {
+  // Keep carRef if you specifically need to pass the ref *as a prop*
+  // If you only use it like <group ref={carRef} ...>,
+  // the 'ref' is already part of R3FGroupProps.
+  // But your current destructuring { carRef, ...props } suggests you want it as a prop.
   carRef: React.RefObject<THREE.Group>;
 }
+
 function RetroCar({ carRef, ...props }: RetroCarProps) {
   const speed = 5; // Adjust speed as needed
 
   // Simple forward movement + slight bounce
   useFrame((state, delta) => {
     if (carRef.current) {
-      // Move car continuously along negative Z
       carRef.current.position.z -= delta * speed;
-
-      // Subtle bounce - No change needed here
       carRef.current.position.y =
         0.25 + Math.sin(state.clock.elapsedTime * speed * 1.5) * 0.03;
     }
   });
 
-  const bodyColor = "#FF00FF"; // Magenta/Pink
-  const glassColor = "#404050"; // Dark metallic blue/grey
+  const bodyColor = "#FF00FF";
+  const glassColor = "#404050";
 
-  // Use the passed ref
+  // Use the passed ref on the group element
   return (
+    // Pass the ref from props to the actual group element's ref attribute
     <group
       ref={carRef}
-      {...props}
+      {...props} // Spread the rest of the props
       rotation={[0, Math.PI, 0]}
       castShadow
       receiveShadow
@@ -66,7 +70,7 @@ function RetroCar({ carRef, ...props }: RetroCarProps) {
           roughness={0.3}
         />
       </Box>
-      {/* Windshield (Approximation) */}
+      {/* Windshield */}
       <Box
         args={[1.5, 0.35, 0.1]}
         position={[0, 0.6, 0.75]}
@@ -80,7 +84,7 @@ function RetroCar({ carRef, ...props }: RetroCarProps) {
           opacity={0.6}
         />
       </Box>
-      {/* Rear Window (Approximation) */}
+      {/* Rear Window */}
       <Box
         args={[1.5, 0.35, 0.1]}
         position={[0, 0.6, -1.25]}
@@ -94,7 +98,7 @@ function RetroCar({ carRef, ...props }: RetroCarProps) {
           opacity={0.6}
         />
       </Box>
-      {/* Hood Wedge (Approximation) */}
+      {/* Hood Wedge */}
       <Box
         args={[1.7, 0.3, 1.5]}
         position={[0, 0.15, 1.4]}
@@ -137,15 +141,16 @@ function RetroCar({ carRef, ...props }: RetroCarProps) {
       >
         <meshStandardMaterial color="#222222" roughness={0.5} />
       </Cylinder>
+      {/* Text */}
       <Text
-        position={[0, 0.2, -1.92]} // X=center, Y=Center of main body height, Z=Just outside the original front face
-        rotation={[0, Math.PI, 0]} // Rotate text 180deg to face outwards from this surface
-        fontSize={0.25} // Adjust size as needed
-        color="#FFFFFF" // Text color
-        anchorX="center" // Horizontal alignment
-        anchorY="middle" // Vertical alignment
-        outlineWidth={0.01} // Optional outline
-        outlineColor="#000000" // Optional outline color
+        position={[0, 0.2, -1.92]}
+        rotation={[0, Math.PI, 0]}
+        fontSize={0.25}
+        color="#FFFFFF"
+        anchorX="center"
+        anchorY="middle"
+        outlineWidth={0.01}
+        outlineColor="#000000"
       >
         akshay mp
       </Text>
@@ -153,6 +158,7 @@ function RetroCar({ carRef, ...props }: RetroCarProps) {
   );
 }
 
+// ... (Rest of your VaporwaveSunset, Scene, SearchForm, FuturePortfolioPage components remain the same)
 // Vaporwave Sunset Background (Unchanged)
 function VaporwaveSunset() {
   /* ... Same as before ... */
