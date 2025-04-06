@@ -45,7 +45,7 @@ const SubwaySliderPage: NextPage = () => {
           {embedUrl ? (
             <iframe
               style={styles.videoIframe}
-              src={isPanelOpen ? embedUrl : null} // Load src only when open to prevent premature load/play
+              src={isPanelOpen ? embedUrl : ""} // Load src only when open to prevent premature load/play
               title="Subway Surfers Gameplay"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
