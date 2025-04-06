@@ -17,9 +17,6 @@ const SubwaySliderPage: NextPage = () => {
 
   // Construct the YouTube embed URL only once
   const embedUrl = useMemo(() => {
-    if (YOUTUBE_VIDEO_ID_PLACEHOLDER === "YOUR_YOUTUBE_VIDEO_ID_HERE") {
-      return null; // Don't construct if placeholder is still there
-    }
     return `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID_PLACEHOLDER}?autoplay=1&loop=1&controls=0&playlist=${YOUTUBE_VIDEO_ID_PLACEHOLDER}${
       AUTOPLAY_MUTED ? "&mute=1" : ""
     }&playsinline=1`;
@@ -48,7 +45,7 @@ const SubwaySliderPage: NextPage = () => {
           {embedUrl ? (
             <iframe
               style={styles.videoIframe}
-              src={isPanelOpen ? embedUrl : ""} // Load src only when open to prevent premature load/play
+              src={isPanelOpen ? embedUrl : null} // Load src only when open to prevent premature load/play
               title="Subway Surfers Gameplay"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
